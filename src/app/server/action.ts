@@ -1,4 +1,5 @@
 "use server"
+import { LAMPORT } from "@/lib/constants";
 import axios from "axios";
 
 export async function getBalanceAndAirdrop({
@@ -11,23 +12,31 @@ export async function getBalanceAndAirdrop({
   jsonrpc: string;
 }) {
   if (method === "getBalance") {
-    const response = await axios.post("https://api.devnet.solana.com/", {
-      id: "1",
-      jsonrpc,
-      method,
-      params: [publicKey],
-    });
-
-    console.log(response.data);
-    return response.data;
+    try {
+        const response = await axios.post("https://api.devnet.solana.com/", {
+            id: "1",
+            jsonrpc,
+            method,
+            params: [publicKey],
+          });
+      
+          console.log(response.data);
+          return response.data;
+    } catch (error) {
+        return "Error"
+    }
   } else if (method === "requestAirdrop") {
-    const response = await axios.post("https://api.devnet.solana.com/", {
-      id: "1",
-      jsonrpc,
-      method,
-      params: [publicKey, 1000000000],
-    });
-    console.log(response.data);
-    response.data;
+      try {
+        const response = await axios.post("https://api.devnet.solana.com/", {
+            id: "1",
+            jsonrpc,
+            method,
+            params: [publicKey, LAMPORT],
+          });
+          console.log(response.data);
+          return response.data;
+      } catch (error) {
+        return "Error"
+      }
   }
 }
