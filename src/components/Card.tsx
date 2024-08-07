@@ -106,7 +106,7 @@ export function Card(){
                   </div>
                   {balance && (
                     <div className="w-full text-white">
-                      <p className="flex justify-center items-center">{balance}</p>
+                      <p className="flex justify-center items-center text-base">Your Balance is {balance}</p>
                     </div>
                   )}
                 </div>
@@ -118,6 +118,7 @@ export function Card(){
                         type="text"
                         className="p-2 col-span-2 bg-transparent rounded-md text-sm border border-white placeholder:text-sm"
                         placeholder="Your Public Key"
+                        onChange={(e : any) => setPublicKey(e.target.value)}
                       />
                       <select className="p-2 col-span-1 bg-transparent rounded-md border border-orange-500">
                         <option

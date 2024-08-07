@@ -25,7 +25,7 @@ export async function getBalanceAndAirdrop({
       id: "1",
       jsonrpc,
       method,
-      params: [publicKey, 0],
+      params: [publicKey, 1000000000],
     });
     console.log(response.data);
     response.data;
