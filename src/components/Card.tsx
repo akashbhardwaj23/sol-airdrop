@@ -10,7 +10,7 @@ export function Card() {
     useState<BalanceOrAirdrop>("balance");
   const [publicKey, setPublicKey] = useState<string>();
   const [balance, setBalance] = useState<number | null>(null);
-  const [token, setToken] = useState<string | null>("shhd");
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState<Boolean>(false);
   const [model, setModel] = useState<Boolean>(false);
 
