@@ -38,7 +38,7 @@ You are good to go !
 
 ## Deployed on Vercel
 
-[Link](sol-airdrop-sol.vercel.app)
+[Deployed Link](https://sol-airdrop-sol.vercel.app)
 
 
 ## Good Bye
