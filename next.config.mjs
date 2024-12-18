@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+   images : {
+    remotePatterns : [
+        {
+            hostname : 'solana.com',
+            protocol : 'https',
+            
+        }
+    ]
+   }    
+};
 
 export default nextConfig;
