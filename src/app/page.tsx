@@ -1,5 +1,5 @@
 "use client";
-import { Card } from "@/components/Card";
+import { CardComponent } from "@/components/Card";
 import { Logo } from "@/components/Logo";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
       <div className="relative w-full h-full z-10">
         <Logo />
 
-        <Card />
+        <CardComponent />
       </div>
 
       {/* <StarsBackground className="bg-green-800 z-0" /> */}

@@ -2,10 +2,15 @@ import { getBalanceAndAirdrop } from "@/app/server/action";
 import { LAMPORT } from "@/lib/constants";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Card } from "./ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Select, SelectContent, SelectGroup,SelectTrigger, SelectValue, SelectItem } from "./ui/select";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 type BalanceOrAirdrop = "balance" | "Airdrop";
 
-export function Card() {
+export function CardComponent() {
   const [balanceOrAirdrop, setBalanceOrAirdrop] =
     useState<BalanceOrAirdrop>("balance");
   const [publicKey, setPublicKey] = useState<string>();
@@ -47,61 +52,34 @@ export function Card() {
         return;
       }
       setToken(response.result);
+
       setLoading(false);
     }
   };
 
   return (
     <div className="absolute flex justify-center w-full top-48">
-      <div
+      <Card
         className={`flex flex-col justify-center items-center w-[35%] ${
           model ? "blur-sm" : ""
-        } rounded-md border border-white px-4 py-8`}
+        } rounded-md px-4 py-8`}
       >
         <h1 className="text-2xl font-semibold mb-4">
           Check Balance and Airdrop SOLs
         </h1>
-
-        <div className="w-full">
-          <div className="relative w-full flex justify-between  h-11 rounded-md items-center mb-6 bg-gray-600">
-            {balanceOrAirdrop === "balance" ? (
-              <div className="absolute bg-white h-9 w-1/2 rounded-md ml-1 left-0 z-0"></div>
-            ) : (
-              <div className="absolute bg-white h-9 w-1/2 rounded-md mr-1 right-0 z-0"></div>
-            )}
-            <div
-              className={`${
-                balanceOrAirdrop === "balance" ? "text-black" : "text-white"
-              } w-1/2 flex justify-center font-semibold text-base z-10 hover:cursor-pointer`}
-              onClick={() => setBalanceOrAirdrop("balance")}
-            >
-              <span>Balance</span>
-            </div>
-            <div
-              className={`${
-                balanceOrAirdrop === "balance" ? "text-white" : "text-black"
-              } w-1/2 flex justify-center font-semibold text-base z-10 hover:cursor-pointer`}
-              onClick={() => setBalanceOrAirdrop("Airdrop")}
-            >
-              <span>Airdrop</span>
-            </div>
-          </div>
-          {balanceOrAirdrop === "balance" ? (
-            <div className="w-full px-4">
+        <Tabs defaultValue="balance" className="w-full">
+          <TabsList className="grid grid-cols-2 w-full mb-4">
+            <TabsTrigger value="balance">Balance</TabsTrigger>
+            <TabsTrigger value="Airdrop">Airdrop</TabsTrigger>
+          </TabsList>
+          <TabsContent value="balance">
               <div className="w-full mb-4">
-                <input
-                  type="text"
-                  className="px-2 py-2 w-full bg-transparent border border-orange-400 text-sm rounded-lg placeholder:text-sm"
-                  placeholder="Your Public key"
-                  onChange={(e: any) => setPublicKey(e.target.value)}
-                />
+                <Input type="text" placeholder="Your Public key" onChange={(e: any) => setPublicKey(e.target.value)} />
               </div>
               <div className="w-full mb-8">
-                <button
-                  className="p-2 bg-transparent border border-white w-full rounded-lg hover:cursor-pointer flex justify-center items-center"
-                  onClick={() => sendBalanceOrAirdropRequest("balance")}
-                >
-                  <span className="pr-2">check your balance</span>
+                  <Button
+                   className="p-2 w-full rounded-lg hover:cursor-pointer flex justify-center items-center"
+                  onClick={() => sendBalanceOrAirdropRequest("balance")}><span className="pr-2">check your balance</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -115,8 +93,8 @@ export function Card() {
                       strokeLinejoin="round"
                       d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3"
                     />
-                  </svg>
-                </button>
+                  </svg></Button>
+              
               </div>
               {balance && (
                 <div className="w-full text-[#2596be]">
@@ -125,30 +103,30 @@ export function Card() {
                   </p>
                 </div>
               )}
-            </div>
-          ) : (
-            <div className="w-full px-4">
+            
+          </TabsContent>
+
+          <TabsContent value="Airdrop">
               <div className="w-full mb-4">
                 <div className="w-full grid grid-cols-3 gap-2">
-                  <input
-                    type="text"
-                    className="p-2 col-span-2 bg-transparent rounded-md text-sm border border-white placeholder:text-sm"
-                    placeholder="Your Public Key"
-                    onChange={(e: any) => setPublicKey(e.target.value)}
-                  />
-                  <select className="p-2 col-span-1 bg-transparent rounded-md border border-orange-500">
-                    <option
-                      value="sol"
-                      className="p-2 bg-transparent rounded-md border border-white"
-                    >
-                      Sol
-                    </option>
-                  </select>
+                  <Input type="text" className="p-2 col-span-2 rounded-md text-sm placeholder:text-sm" placeholder="Your Public Key" onChange={(e: any) => setPublicKey(e.target.value)} />
+                  <Select>
+                    <SelectTrigger className="p-2 col-span-1 rounded-md border border-orange-500">
+                    <SelectValue placeholder="Select Chain"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="solana">
+                        Solana
+                      </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               <div className="w-full mb-6">
-                <button
+                {/* <button
                   className="p-2 bg-transparent border border-white w-full rounded-lg hover:cursor-pointer flex justify-center items-center mb-4"
                   onClick={() => sendBalanceOrAirdropRequest("Airdrop")}
                 >
@@ -167,30 +145,50 @@ export function Card() {
                       />
                     </>
                   )}
-                </button>
+                </button> */}
+
+
+
+                <Button className="p-2 w-full rounded-lg hover:cursor-pointer flex justify-center items-center mb-4"
+                  onClick={() => sendBalanceOrAirdropRequest("Airdrop")}
+                  >
+                  {loading ? (
+                    <div className="animate-spin h-6 w-6 bg-white rounded-md"></div>
+                  ) : (
+                    <>
+                      <span className="pr-2">Airdrop</span>
+                      <Image
+                        src={"/airdrop.png"}
+                        width={40}
+                        height={40}
+                        style={{ width: "auto", height: "auto" }}
+                        alt="airdrop-image"
+                        className="contrast-75"
+                      />
+                    </>
+                  )}
+                </Button>
 
                 {token && (
-                  <button
-                    className="p-2 bg-transparent border border-white w-full rounded-lg hover:cursor-pointer flex justify-center items-center"
-                    onClick={() => setModel(true)}
+                  <Button
+                      className="p-2 w-full rounded-lg hover:cursor-pointer flex justify-center items-center"
+                      onClick={() => setModel(true)}
                   >
                     <span className="pr-2">Check the transaction</span>
                     <Image
-                      src={"/airdrop.png"}
-                      width={40}
-                      height={40}
-                      style={{ width: "auto", height: "auto" }}
-                      alt="airdrop-image"
-                      className="contrast-75"
+                    src={"/airdrop.png"}
+                    width={40}
+                    height={40}
+                    style={{width: "auto", height : "auto"}}
+                    alt="airdropimage"
+                    className="contrast-75"
                     />
-                  </button>
+                  </Button>
                 )}
               </div>
-            </div>
-          )}
-        </div>
-      </div>
-
+          </TabsContent>
+        </Tabs>
+      </Card>
       {model && <Model setModel={setModel} />}
     </div>
   );
@@ -206,7 +204,10 @@ function Model({ setModel }: { setModel: Dispatch<SetStateAction<Boolean>> }) {
         <h1 className="text-sm mb-4">
           Any one with this link will be able to see this transaction
         </h1>
-        <div className="absolute flex w-full h-full top-[0.8rem] justify-end right-3" onClick={() => setModel(false)}>
+        <div
+          className="absolute flex w-full h-full top-[0.8rem] justify-end right-3"
+          onClick={() => setModel(false)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="white"
@@ -223,12 +224,11 @@ function Model({ setModel }: { setModel: Dispatch<SetStateAction<Boolean>> }) {
           </svg>
         </div>
         <div className="flex justify-center items-center gap-4 mb-4">
-          <input
-            type="text"
-            value={"hgd"}
-            ref={inputRef}
-            disabled
-            className="w-10/12 bg-transparent border-2 border-blue-700/80 px-2 py-2 rounded-md"
+          <Input
+          type="text"
+          value={"hgd"}
+          disabled
+          className="w-10/12 border-2 border-blue-600/80 px-2 py-2 rounded-md"
           />
           <div
             className={`bg-gray-100 rounded-md ${!copied ? "p-1" : "p-2"}`}
@@ -265,14 +265,77 @@ function Model({ setModel }: { setModel: Dispatch<SetStateAction<Boolean>> }) {
           </div>
         </div>
         <div className="flex justify-center w-full">
-          <button
-            className="px-4 py-2 w-4/5 bg-transparent border border-white rounded-lg"
-            onClick={() => {}}
+          <Button
+          className="px-4 py-2 w-4/5 rounded-lg"
+          onClick={() => {}}
           >
-            Link
-          </button>
+
+          </Button>
         </div>
       </div>
     </div>
   );
+}
+
+{
+  /* <div className="w-full px-4">
+<div className="w-full mb-4">
+  <div className="w-full grid grid-cols-3 gap-2">
+    <input
+      type="text"
+      className="p-2 col-span-2 bg-transparent rounded-md text-sm border border-white placeholder:text-sm"
+      placeholder="Your Public Key"
+      onChange={(e: any) => setPublicKey(e.target.value)}
+    />
+    <select className="p-2 col-span-1 bg-transparent rounded-md border border-orange-500">
+      <option
+        value="sol"
+        className="p-2 bg-transparent rounded-md border border-white"
+      >
+        Sol
+      </option>
+    </select>
+  </div>
+</div>
+
+<div className="w-full mb-6">
+  <button
+    className="p-2 bg-transparent border border-white w-full rounded-lg hover:cursor-pointer flex justify-center items-center mb-4"
+    onClick={() => sendBalanceOrAirdropRequest("Airdrop")}
+  >
+    {loading ? (
+      <div className="animate-spin h-6 w-6 bg-white rounded-md"></div>
+    ) : (
+      <>
+        <span className="pr-2">Airdrop</span>
+        <Image
+          src={"/airdrop.png"}
+          width={40}
+          height={40}
+          style={{ width: "auto", height: "auto" }}
+          alt="airdrop-image"
+          className="contrast-75"
+        />
+      </>
+    )}
+  </button>
+
+  {token && (
+    <button
+      className="p-2 bg-transparent border border-white w-full rounded-lg hover:cursor-pointer flex justify-center items-center"
+      onClick={() => setModel(true)}
+    >
+      <span className="pr-2">Check the transaction</span>
+      <Image
+        src={"/airdrop.png"}
+        width={40}
+        height={40}
+        style={{ width: "auto", height: "auto" }}
+        alt="airdrop-image"
+        className="contrast-75"
+      />
+    </button>
+  )}
+</div>
+</div> */
 }
